@@ -139,6 +139,32 @@ public class ItunesDAO {
 		return result;
 	}
 	
-	
+	public List<Album> getVertici(int durataMillis){
+		String sql = "SELECT a.*,SUM(t.Milliseconds) AS durataAlbum "
+				+ "FROM track t, album a "
+				+ "WHERE t.AlbumId = a.AlbumId "
+				+ "GROUP BY a.AlbumId "
+				+ "HAVING SUM(t.Milliseconds)> ?";
+		
+		List<Album> result = new LinkedList<>();
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, durataMillis);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				Album aa = new Album(res.getInt("AlbumId"), res.getString("Title"));
+				result.add(aa);
+				aa.setDurata(res.getInt("durataAlbum"));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("SQL Error");
+		}
+		return result;
+	}
 	
 }

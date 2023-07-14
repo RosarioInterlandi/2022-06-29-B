@@ -1,9 +1,32 @@
 package it.polito.tdp.itunes.model;
 
-public class Album {
+public class Album implements Comparable<Album>{
 	private Integer albumId;
 	private String title;
+	private int durata;
+	private VerticeBilanciato vb;
 	
+	
+	
+	
+	
+	public VerticeBilanciato getVb() {
+		return vb;
+	}
+
+	public void setVb(VerticeBilanciato vb) {
+		this.vb = vb;
+	}
+
+	public int getDurata() {
+		return durata;
+	}
+
+	public void setDurata(int durata) {
+		// Nel database mi da il valore in millisecondi, poi mi chiede i secondi
+		this.durata = durata/1000;
+	}
+
 	public Album(Integer albumId, String title) {
 		super();
 		this.albumId = albumId;
@@ -54,6 +77,11 @@ public class Album {
 	@Override
 	public String toString() {
 		return title;
+	}
+
+	@Override
+	public int compareTo(Album o) {
+		return this.getTitle().toLowerCase().compareTo(o.getTitle().toLowerCase());
 	}
 	
 	
